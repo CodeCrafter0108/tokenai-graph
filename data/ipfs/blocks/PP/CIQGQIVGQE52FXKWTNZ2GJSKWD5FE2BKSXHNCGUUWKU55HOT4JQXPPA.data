@@ -1,0 +1,95 @@
+
+¢šdataSources:
+  - kind: ethereum
+    mapping:
+      abis:
+        - file:
+            /: /ipfs/Qmb9TTWm5hR4BGA9Gx3JudN6fU1wqhBs5VBSU82i6c3GEj
+          name: Launchpad
+        - file:
+            /: /ipfs/QmPfKNZPkVATzL3EHypkcsyKhehR4jkiYEVqSzh2hxWYj1
+          name: ERC20Token
+        - file:
+            /: /ipfs/QmVduuKWkyu5XccFMDFxXkrNU6ZqFQp6RMDHsb9pXDeXoR
+          name: UniswapV2Pair
+        - file:
+            /: /ipfs/QmSok4sh1a5hk8kMneexvCeDkEzHbSW9k7Hm4DfiH8aWwo
+          name: UniswapV2Factory
+        - file:
+            /: /ipfs/QmPK1rk7dkcMcKxCQgypCJbHZ4ankJni4dYSJvC7nXKppn
+          name: UniswapV3Pair
+        - file:
+            /: /ipfs/QmcnbR3W4UthMtsYRsmxAY9dSKcfQkqi8ciVEsUvehmFWF
+          name: UniswapV3Factory
+        - file:
+            /: /ipfs/QmYgzM3RNMYYmRw9o1XrEcJpUuiKVZkfaARFkioPJdpugU
+          name: NativeTokenPriceOracle
+      apiVersion: 0.0.7
+      entities:
+        - Listing
+      eventHandlers:
+        - event: >-
+            Listing(indexed
+            address,address,string,string,string,string,string,string,string)
+          handler: handleListing
+      file:
+        /: /ipfs/QmdRnQFTpLfo4D7wkykKa2Z4sh9mkt3fMHXgiGGALsktjt
+      kind: ethereum/events
+      language: wasm/assemblyscript
+    name: Launchpad
+    network: sonic
+    source:
+      abi: Launchpad
+      address: '0x44DB18FF9472B86d990D7BFcb71518cB55c52826'
+      startBlock: 6538656
+indexerHints:
+  prune: auto
+schema:
+  file:
+    /: /ipfs/QmSiH8gpibVy5PfTczZfSWuHE37ttTkQcidK4TXuQc81RN
+specVersion: 1.0.0
+templates:
+  - kind: ethereum/contract
+    mapping:
+      abis:
+        - file:
+            /: /ipfs/QmVduuKWkyu5XccFMDFxXkrNU6ZqFQp6RMDHsb9pXDeXoR
+          name: UniswapV2PairListener
+        - file:
+            /: /ipfs/Qmb9TTWm5hR4BGA9Gx3JudN6fU1wqhBs5VBSU82i6c3GEj
+          name: Launchpad
+        - file:
+            /: /ipfs/QmPfKNZPkVATzL3EHypkcsyKhehR4jkiYEVqSzh2hxWYj1
+          name: ERC20Token
+        - file:
+            /: /ipfs/QmVduuKWkyu5XccFMDFxXkrNU6ZqFQp6RMDHsb9pXDeXoR
+          name: UniswapV2Pair
+        - file:
+            /: /ipfs/QmSok4sh1a5hk8kMneexvCeDkEzHbSW9k7Hm4DfiH8aWwo
+          name: UniswapV2Factory
+        - file:
+            /: /ipfs/QmPK1rk7dkcMcKxCQgypCJbHZ4ankJni4dYSJvC7nXKppn
+          name: UniswapV3Pair
+        - file:
+            /: /ipfs/QmcnbR3W4UthMtsYRsmxAY9dSKcfQkqi8ciVEsUvehmFWF
+          name: UniswapV3Factory
+        - file:
+            /: /ipfs/QmYgzM3RNMYYmRw9o1XrEcJpUuiKVZkfaARFkioPJdpugU
+          name: NativeTokenPriceOracle
+      apiVersion: 0.0.7
+      entities:
+        - Swap
+      eventHandlers:
+        - event: >-
+            Swap(indexed address,uint256,uint256,uint256,uint256,indexed
+            address)
+          handler: handleSwap
+      file:
+        /: /ipfs/QmNdpWmKxQYe6aAZnJ3j5WpijvSJHN5joowzwm59wAAH92
+      kind: ethereum/events
+      language: wasm/assemblyscript
+    name: LiquidityPairListener
+    network: sonic
+    source:
+      abi: UniswapV2PairListener
+š
