@@ -39,8 +39,6 @@ In `subgraph.yaml` you can find the networks you want to listen to. You need to 
 
 In `docker-compose.yml` you need to change `ethereum` value to the network you want to listen to and provide the correct RPC.
 
-
-
 ## Handlers
 In `src/mapping.ts` you can find the handlers for the events. You can add more handlers for the events you want to listen to.
 
