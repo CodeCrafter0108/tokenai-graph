@@ -32,7 +32,7 @@ export function handleListing(event: Listing): void {
   token.chatUrl = event.params.chatUrl;
   token.socialUrl = event.params.socialUrl;
   token.description = event.params.description;
-  token.decimals = 18;
+  token.decimals = i32(18);
 
   token.blockNumber = event.block.number;
   token.blockTimestamp = event.block.timestamp;

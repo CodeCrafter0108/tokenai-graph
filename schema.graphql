@@ -48,3 +48,13 @@ type TokenCounter @entity {
   id: ID!
   totalCount: Int!
 }
+
+type BaseToken @entity {
+  id: ID!
+  address: Bytes!
+  name: String!
+  symbol: String!
+  decimals: Int!
+  price: BigDecimal!
+  imageUrl: String!
+}
