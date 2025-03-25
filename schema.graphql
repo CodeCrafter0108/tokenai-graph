@@ -16,6 +16,7 @@ type Token @entity{
   chatUrl: String! # string
   socialUrl: String! # string
   description: String! # string
+  decimals: Int!
 
   pair: LiquidityPair
   price: BigDecimal!
@@ -41,4 +42,9 @@ type Swap @entity(immutable: true){
   user: Bytes!
   transactionHash: Bytes!
   blockTimestamp: BigInt!
+}
+
+type TokenCounter @entity {
+  id: ID!
+  totalCount: Int!
 }

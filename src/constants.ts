@@ -1,8 +1,8 @@
-import {Address, BigInt} from "@graphprotocol/graph-ts";
+import { Address, BigInt } from "@graphprotocol/graph-ts";
 
 export const ZERO = Address.fromString("0x0000000000000000000000000000000000000000")
 
-export const LAUNCHPAD = Address.fromString("0x44DB18FF9472B86d990D7BFcb71518cB55c52826")
+export const LAUNCHPAD = Address.fromString("0x333fE6dDA12D69bE0C7dB670785206E4419721E4")
 
 export const UNISWAP_V2_FACTORY = Address.fromString("0xEE4bC42157cf65291Ba2FE839AE127e3Cc76f741")
 

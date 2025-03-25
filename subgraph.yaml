@@ -8,9 +8,9 @@ dataSources:
     name: Launchpad
     network: sonic
     source:
-      address: "0x44DB18FF9472B86d990D7BFcb71518cB55c52826"
+      address: "0x333fE6dDA12D69bE0C7dB670785206E4419721E4"
       abi: Launchpad
-      startBlock: 6538656
+      startBlock: 15878138
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -36,7 +36,7 @@ dataSources:
         - event: Listing(indexed address,address,string,string,string,string,string,string,string)
           handler: handleListing
       file: ./src/handlers/launchpad.ts
-
+      
 templates:
   - kind: ethereum/contract
     name: LiquidityPairListener
