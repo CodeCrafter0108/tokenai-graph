@@ -37,6 +37,7 @@ export function handleSwap(event: SwapEvent): void {
     swap.blockTimestamp = event.block.timestamp
     swap.pair = pair._address.toHexString()
     swap.price = token.price
+    swap.token = token.id
 
     if(pair.token0().equals(token.address) && !event.params.amount0In.isZero() ||
         pair.token1().equals(token.address) && !event.params.amount1In.isZero()){

@@ -42,6 +42,7 @@ type Swap @entity(immutable: true){
   user: Bytes!
   transactionHash: Bytes!
   blockTimestamp: BigInt!
+  token: Token!
 }
 
 type TokenCounter @entity {
