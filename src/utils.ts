@@ -8,7 +8,7 @@ import {UniswapV2Pair} from "../generated/templates/LiquidityPairListener/Uniswa
 import {UniswapV3Pair} from "../generated/templates/LiquidityPairListener/UniswapV3Pair";
 import {
     E_18,
-    LAUNCHPAD, N_18,
+    LAUNCHPAD,
     NATIVE_PRICE_ORACLE, UNDERLYING_STABLE_TOKEN_UNISWAP_V3_PAIR_TAX_RATE,
     UNISWAP_V2_FACTORY,
     UNISWAP_V3_FACTORY,
@@ -62,7 +62,7 @@ export function GetUniswapV3Pair(token0 : Address, token1 : Address, tax : i32) 
 }
 
 export function GetAITokenPriceInUSD(address : Address) : BigDecimal{
-    return GetAITokenPriceToStableInUniswapV2Pair(GetUniswapV2Pair(address, GetUnderlyingStableToken())).times(GetStableTokenUSDPrice())
+    return GetAITokenPriceToStableInUniswapV2Pair(GetUniswapV2Pair(address, GetUnderlyingStableToken())).times(GetBaksPriceInAnon())
 }
 
 export function GetAITokenPriceToStableInUniswapV2Pair(pair : UniswapV2Pair) : BigDecimal{
@@ -85,9 +85,10 @@ export function GetAITokenPriceToStableInUniswapV2Pair(pair : UniswapV2Pair) : B
     const reserve1 = reserves.get_reserve1().toBigDecimal()
 
     if(token0._address.equals(underlyingStableTokenAddress)){
-        return reserve1.div(reserve0)
+        return reserve0.div(reserve1)
     }
-    return reserve0.div(reserve1)
+        return reserve1.div(reserve0)
+
 }
 
 export function GetNativeTokenPrice() : BigDecimal {
@@ -97,13 +98,48 @@ export function GetNativeTokenPrice() : BigDecimal {
         return BigDecimal.zero()
     }
 
-    const round = oracle.latestRound()
-    const decimals = oracle.decimals()
-    return oracle.getAnswer(round).toBigDecimal().div(BigDecimal.fromString(decimals.toString()))
+    // const round = oracle.latestRound()
+    // const decimals = oracle.decimals()
+    // return oracle.getAnswer(round).toBigDecimal().div(BigDecimal.fromString(decimals.toString()))
+    const priceResult = oracle.latestAnswer();
+    const decimals = oracle.decimals();
+
+  return priceResult
+    .toBigDecimal()
+    .div(BigDecimal.fromString(`1e${decimals.toString()}`));
 }
 
-export function GetStableTokenUSDPrice() : BigDecimal{
+export function GetBaksPriceInAnon() : BigDecimal{
     const underlyingStableTokenAddress = Launchpad.bind(LAUNCHPAD).baks()
+    const tAnon = Launchpad.bind(LAUNCHPAD).tAnon()
+
+    if(underlyingStableTokenAddress.equals(ZERO)){
+        log.error(`Couldn't fetch Underlying Stable Token price: the underlying stable token is blank.`,[])
+        return BigDecimal.zero()
+    }
+
+    const pair = GetUniswapV3Pair(tAnon, underlyingStableTokenAddress, UNDERLYING_STABLE_TOKEN_UNISWAP_V3_PAIR_TAX_RATE)
+
+    if(pair._address.equals(ZERO)){
+        log.error(`Couldn't fetch Underlying tAnon Token price: the pair is missing for tokens: ${tAnon.toHexString()},${underlyingStableTokenAddress.toHexString()}.`,[])
+        return BigDecimal.zero()
+    }
+
+    const tAnonPrice = GetAnonPriceInNative()
+    const sqrtPrice = pair.slot0().getSqrtPriceX96().toBigDecimal()
+    // const token0 = pair.token0()
+
+    let normalizedPrice = sqrtPrice.div(BigInt.fromI32(2).pow(96).toBigDecimal())
+    // normalizedPrice *= normalizedPrice
+    // if(token0.equals(underlyingStableTokenAddress)){
+    //     return BigDecimal.fromString("1").div(normalizedPrice).times(tAnonPrice)
+    // }
+    return normalizedPrice.times(tAnonPrice)
+}
+
+
+export function GetAnonPriceInNative() : BigDecimal{
+    const underlyingStableTokenAddress = Launchpad.bind(LAUNCHPAD).tAnon()
 
     if(underlyingStableTokenAddress.equals(ZERO)){
         log.error(`Couldn't fetch Underlying Stable Token price: the underlying stable token is blank.`,[])
@@ -119,13 +155,13 @@ export function GetStableTokenUSDPrice() : BigDecimal{
 
     const nativePrice = GetNativeTokenPrice()
     const sqrtPrice = pair.slot0().getSqrtPriceX96().toBigDecimal()
-    const token0 = pair.token0()
+    // const token0 = pair.token0()
 
     let normalizedPrice = sqrtPrice.div(BigInt.fromI32(2).pow(96).toBigDecimal())
-    normalizedPrice *= normalizedPrice
-    if(token0.equals(underlyingStableTokenAddress)){
-        return BigDecimal.fromString("1").div(normalizedPrice).times(nativePrice)
-    }
+    // normalizedPrice *= normalizedPrice
+    // if(token0.equals(underlyingStableTokenAddress)){
+    //     return BigDecimal.fromString("1").div(normalizedPrice).times(nativePrice)
+    // }
     return normalizedPrice.times(nativePrice)
 }
 
@@ -134,5 +170,5 @@ export function GetTotalSupply(address : Address) : BigInt {
 }
 
 export function GetAITokenMarketCapitalization(address : Address) : BigDecimal {
-    return GetTotalSupply(address).toBigDecimal().div(N_18).times(GetAITokenPriceInUSD(address))
+    return GetTotalSupply(address).toBigDecimal().div(E_18).times(GetAITokenPriceInUSD(address))
 }

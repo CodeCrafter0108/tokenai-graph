@@ -1,4 +1,4 @@
-import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
+import { Address, BigInt } from "@graphprotocol/graph-ts";
 
 export const ZERO = Address.fromString("0x0000000000000000000000000000000000000000")
 
@@ -14,7 +14,7 @@ export const USDC_PRICE_ORACLE = Address.fromString("0x55bCa887199d5520B3Ce285D4
 
 export const WRAPPED_NATIVE_TOKEN = Address.fromString("0x039e2fB66102314Ce7b64Ce5Ce3E5183bc94aD38")
 
-export const UNDERLYING_STABLE_TOKEN_UNISWAP_V3_PAIR_TAX_RATE = i32(10000)
+export const UNDERLYING_STABLE_TOKEN_UNISWAP_V3_PAIR_TAX_RATE = i32(3000)
 
 export const E_18 = BigInt.fromI32(10).pow(18).toBigDecimal()
 

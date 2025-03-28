@@ -43,7 +43,7 @@ dataSources:
     source:
       address: "0xc76dFb89fF298145b417d221B2c747d84952e01d"
       abi: PriceOracle
-      startBlock: 15954581
+      startBlock: 16535899
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -57,7 +57,7 @@ dataSources:
         - handler: handleBlock
           filter:
             kind: call 
-            every: 100
+            every: 750
       file: ./src/handlers/oracle.ts
 
 templates:

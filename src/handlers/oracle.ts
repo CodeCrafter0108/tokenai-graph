@@ -15,14 +15,16 @@ export function handleBlock(block: ethereum.Block): void {
       SONIC_ADDRESS,
       "Sonic",
       "S",
-      "https://raw.githubusercontent.com/CodeCrafter0108/tokenai-graph/main/assets/0x0000000000000000000000000000000000000000.png"
+      "https://raw.githubusercontent.com/YieldEnhancementLabs/token-logos/main/146/0x0000000000000000000000000000000000000000/token-logo.png",
+      i32(18)
     );
     updateTokenPrice(
       USDC_PRICE_ORACLE,
       USDC_ADDRESS,
       "USDC",
       "USDC",
-      "https://raw.githubusercontent.com/CodeCrafter0108/tokenai-graph/main/assets/0x29219dd400f2Bf60E5a23d13Be72B486D4038894.png"
+      "https://raw.githubusercontent.com/YieldEnhancementLabs/token-logos/main/146/0x29219dd400f2Bf60E5a23d13Be72B486D4038894/token-logo.png",
+      i32(6)
     );
   }
 }
@@ -32,7 +34,8 @@ function updateTokenPrice(
   tokenAddress: Address,
   name: string,
   symbol: string,
-  imgUrl: string
+  imgUrl: string,
+  tokenDecimals: i32
 ): void {
   const oracle = PriceOracle.bind(oracleAddress);
 
@@ -49,7 +52,7 @@ function updateTokenPrice(
     token = new BaseToken(tokenId);
     token.address = tokenAddress;
     token.symbol = symbol;
-    token.decimals = decimals;
+    token.decimals = tokenDecimals;
     token.name = name;
     token.imageUrl = imgUrl;
   }

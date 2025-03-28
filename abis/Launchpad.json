@@ -1,26 +1,17 @@
 [
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "_weth",
-        "type": "address"
-      },
+      { "internalType": "address", "name": "_weth", "type": "address" },
       {
         "internalType": "address",
         "name": "_tokenImplementation",
         "type": "address"
       },
-      {
-        "internalType": "address",
-        "name": "_router",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_baks",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "_router", "type": "address" },
+      { "internalType": "address", "name": "_baks", "type": "address" },
+      { "internalType": "address", "name": "_tAnon", "type": "address" },
+      { "internalType": "address", "name": "_quoter", "type": "address" },
+      { "internalType": "address", "name": "_univ3Router", "type": "address" }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
@@ -88,14 +79,15 @@
   },
   {
     "inputs": [],
+    "name": "INITIAL_SUPPLY",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "LIQUIDITY_BONUS",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -103,11 +95,7 @@
     "inputs": [],
     "name": "WETH",
     "outputs": [
-      {
-        "internalType": "contract IWETH",
-        "name": "",
-        "type": "address"
-      }
+      { "internalType": "contract IWETH", "name": "", "type": "address" }
     ],
     "stateMutability": "view",
     "type": "function"
@@ -115,23 +103,13 @@
   {
     "inputs": [],
     "name": "baks",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "_baks",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "_baks", "type": "address" }
     ],
     "name": "changeBaks",
     "outputs": [],
@@ -140,11 +118,7 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "_newRouter",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "_newRouter", "type": "address" }
     ],
     "name": "changeRouter",
     "outputs": [],
@@ -166,10 +140,10 @@
   },
   {
     "inputs": [],
-    "name": "owner",
+    "name": "factory",
     "outputs": [
       {
-        "internalType": "address",
+        "internalType": "contract IMemeUniV2Factory",
         "name": "",
         "type": "address"
       }
@@ -178,70 +152,68 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
-      {
-        "internalType": "string",
-        "name": "name",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "symbol",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "siteUrl",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "imageUrl",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "description",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "chatUrl",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "socialUrl",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "supply",
-        "type": "uint256"
-      }
+      { "internalType": "string", "name": "name", "type": "string" },
+      { "internalType": "string", "name": "symbol", "type": "string" },
+      { "internalType": "string", "name": "siteUrl", "type": "string" },
+      { "internalType": "string", "name": "imageUrl", "type": "string" },
+      { "internalType": "string", "name": "description", "type": "string" },
+      { "internalType": "string", "name": "chatUrl", "type": "string" },
+      { "internalType": "string", "name": "socialUrl", "type": "string" },
+      { "internalType": "uint256", "name": "initialBuy", "type": "uint256" }
     ],
     "name": "pro_listing",
     "outputs": [
+      { "internalType": "address", "name": "", "type": "address" },
+      { "internalType": "address", "name": "", "type": "address" }
+    ],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "amountForBuying",
+        "type": "uint256"
       }
+    ],
+    "name": "quoteInitialBuy",
+    "outputs": [
+      { "internalType": "uint256", "name": "nativeAmount", "type": "uint256" }
     ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
+    "name": "quoter",
+    "outputs": [
+      { "internalType": "contract IQuoterV2", "name": "", "type": "address" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "router",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "routerV3",
     "outputs": [
       {
-        "internalType": "address",
+        "internalType": "contract IUniswapV3Router",
         "name": "",
         "type": "address"
       }
@@ -251,24 +223,21 @@
   },
   {
     "inputs": [],
+    "name": "tAnon",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "tokenImplementation",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "_newOwner",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "_newOwner", "type": "address" }
     ],
     "name": "transferOwner",
     "outputs": [],
