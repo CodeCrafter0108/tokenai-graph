@@ -9,7 +9,7 @@ import {
   ZERO_BI,
 } from "./constants";
 import { Token24hData, Token, TokenPrice6h, TokenPriceHour, TokenPrice5m } from "../generated/schema";
-import { BigDecimal, BigInt, ethereum } from "@graphprotocol/graph-ts";
+import { BigDecimal, BigInt, Bytes, ethereum } from "@graphprotocol/graph-ts";
 
 export function GetTimeId(timestamp: i32, seconds: i32): i32 {
   return timestamp / seconds;
@@ -30,6 +30,17 @@ function Initialize24hData(
   token24hData.sellVolumeUsd24h = ZERO_BD;
   token24hData.sellers24h = [];
   token24hData.buyers24h = [];
+}
+
+export function addUserIfNotExists (users: Bytes[] | null, user: Bytes ): Bytes[] {
+  let usersArray = users;
+      if (usersArray === null) {
+        usersArray = [];
+      }
+      if (!usersArray.includes(user)) {
+        usersArray.push(user);
+      }
+      return usersArray;
 }
 
 export function UpdateToken24hData(
@@ -58,27 +69,13 @@ export function UpdateToken24hData(
     token24hData.sellVolumeUsd24h = token24hData.sellVolumeUsd24h.plus(
       amount.toBigDecimal().div(E_18).times(priceUSD)
     );
-    let sellersArray = token24hData.sellers24h;
-    if (sellersArray === null) {
-      sellersArray = [];
-    }
-    if (!sellersArray.includes(user)) {
-      sellersArray.push(user);
-    }
-    token24hData.sellers24h = sellersArray;
+    token24hData.sellers24h = addUserIfNotExists(token24hData.sellers24h, user);
   } else {
     token24hData.buys24h = token24hData.buys24h.plus(ONE_BI);
     token24hData.buyVolumeUsd24h = token24hData.buyVolumeUsd24h.plus(
       amount.toBigDecimal().div(E_18).times(priceUSD)
     );
-    let buyersArray = token24hData.buyers24h;
-    if (buyersArray === null) {
-      buyersArray = [];
-    }
-    if (!buyersArray.includes(user)) {
-      buyersArray.push(user);
-    }
-    token24hData.buyers24h = buyersArray;
+    token24hData.buyers24h = addUserIfNotExists(token24hData.buyers24h, user);
   }
   token24hData.price = priceUSD;
   token24hData.save();

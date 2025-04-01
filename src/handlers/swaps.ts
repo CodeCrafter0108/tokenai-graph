@@ -12,7 +12,7 @@ import {
   GetUniswapV2PairByAddress,
 } from "../utils";
 import { E_18, ONE_BI } from "../constants";
-import { UpdateToken24hData, UpdateTokenPrice5minute, UpdateTokenPrice6h, UpdateTokenPriceHour } from "../updates";
+import { addUserIfNotExists, UpdateToken24hData, UpdateTokenPrice5minute, UpdateTokenPrice6h, UpdateTokenPriceHour } from "../updates";
 
 export function handleSwap(event: SwapEvent): void {
   const liquidityPairAddress = event.address;
@@ -62,16 +62,7 @@ export function handleSwap(event: SwapEvent): void {
     swap.type = "sell";
       token.sells = token.sells.plus(ONE_BI);
       token.sellVolumeUSD = token.sellVolumeUSD.plus(swap.amount.toBigDecimal().div(E_18).times(priceUSD));
-
-      let sellersArray = token.sellers;
-      if (sellersArray === null) {
-        sellersArray = [];
-      }
-      if (!sellersArray.includes(user)) {
-        sellersArray.push(user);
-      }
-      token.sellers = sellersArray;
-
+      token.sellers = addUserIfNotExists(token.sellers, user);;
       UpdateToken24hData(token, event, swap.amount, priceUSD, true);
   } else {
     swap.amount = event.params.amount0Out.isZero()
@@ -80,16 +71,7 @@ export function handleSwap(event: SwapEvent): void {
     swap.type = "buy";
       token.buys = token.buys.plus(ONE_BI);
       token.buyVolumeUSD = token.buyVolumeUSD.plus(swap.amount.toBigDecimal().div(E_18).times(priceUSD));
-
-      let buyersArray = token.buyers;
-      if (buyersArray === null) {
-        buyersArray = [];
-      }
-      if (!buyersArray.includes(user)) {
-        buyersArray.push(user);
-      }
-      token.buyers = buyersArray;
-
+      token.buyers = addUserIfNotExists(token.buyers, user);
       UpdateToken24hData(token, event, swap.amount, priceUSD, false);
   }
   UpdateTokenPrice6h(token, event, priceUSD);
