@@ -15,6 +15,8 @@ import {
     WRAPPED_NATIVE_TOKEN,
     ZERO
 } from "./constants";
+import { BaseToken } from "../generated/schema";
+import { PriceOracle } from "../generated/PriceOracle/PriceOracle";
 
 
 export function GetUnderlyingStableToken() : Address{
@@ -172,3 +174,49 @@ export function GetTotalSupply(address : Address) : BigInt {
 export function GetAITokenMarketCapitalization(address : Address) : BigDecimal {
     return GetTotalSupply(address).toBigDecimal().div(E_18).times(GetAITokenPriceInUSD(address))
 }
+
+export function GetAITokenPriceInNative(price: BigDecimal): BigDecimal {
+    return price.div(GetNativeTokenPrice())
+}
+
+export function UpdateTokenPrice(
+    oracleAddress: Address,
+    tokenAddress: Address,
+    name: string,
+    symbol: string,
+    imgUrl: string,
+    tokenDecimals: i32
+  ): void {
+    const oracle = PriceOracle.bind(oracleAddress);
+  
+    const priceResult = oracle.latestAnswer();
+    const decimals = oracle.decimals();
+  
+    const price = priceResult
+      .toBigDecimal()
+      .div(BigDecimal.fromString(`1e${decimals.toString()}`));
+  
+    const tokenId = tokenAddress.toHexString();
+    let token = BaseToken.load(tokenId);
+    if (!token) {
+      token = new BaseToken(tokenId);
+      token.address = tokenAddress;
+      token.symbol = symbol;
+      token.decimals = tokenDecimals;
+      token.name = name;
+      token.imageUrl = imgUrl;
+    }
+    token.price = price;
+    token.save();
+  }
+
+export function CalculateLiquidityPool(reserve0: BigInt, reserve1: BigInt, aiTokenPrice: BigDecimal): BigDecimal {
+    return reserve0
+    .toBigDecimal()
+    .div(E_18)
+    .times(
+    reserve0.toBigDecimal().div(reserve1.toBigDecimal()).times(aiTokenPrice)
+    )
+    .plus(reserve1.toBigDecimal().div(E_18).times(aiTokenPrice));
+}
+

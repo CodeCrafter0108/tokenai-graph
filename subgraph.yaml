@@ -43,7 +43,7 @@ dataSources:
     source:
       address: "0xc76dFb89fF298145b417d221B2c747d84952e01d"
       abi: PriceOracle
-      startBlock: 16535899
+      startBlock: 17289659
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

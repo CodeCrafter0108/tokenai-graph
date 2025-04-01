@@ -20,8 +20,23 @@ type Token @entity{
 
   pair: LiquidityPair
   price: BigDecimal!
+  priceInNative: BigDecimal!
   supply: BigInt!
   marketCap: BigDecimal!
+
+  buys: BigInt!
+  sells: BigInt!
+  buyVolumeUSD: BigDecimal!
+  sellVolumeUSD: BigDecimal!
+  sellers: [Bytes!]
+  buyers: [Bytes!]
+
+  liquidityPool: BigDecimal!
+
+  token24hData: [Token24hData!]! @derivedFrom(field: "token")
+  tokenPrice6h: [TokenPrice6h!]! @derivedFrom(field: "token")
+  tokenPriceHour: [TokenPriceHour!]! @derivedFrom(field: "token")
+  tokenPrice5m: [TokenPrice5m!]! @derivedFrom(field: "token")
 }
 
 type LiquidityPair @entity{
@@ -38,16 +53,11 @@ type Swap @entity(immutable: true){
   pair: LiquidityPair!
   amount: BigInt!
   price: BigDecimal!
-  fromAIToken: Boolean!
+  type: String!
   user: Bytes!
   transactionHash: Bytes!
   blockTimestamp: BigInt!
   token: Token!
-}
-
-type TokenCounter @entity {
-  id: ID!
-  totalCount: Int!
 }
 
 type BaseToken @entity {
@@ -58,4 +68,38 @@ type BaseToken @entity {
   decimals: Int!
   price: BigDecimal!
   imageUrl: String!
+}
+
+type Token24hData @entity {
+    id: ID!
+    date: Int!
+    token: Token!
+    buys24h: BigInt!
+    sells24h: BigInt!
+    buyVolumeUsd24h: BigDecimal!
+    sellVolumeUsd24h: BigDecimal!
+    sellers24h: [Bytes!]
+    buyers24h: [Bytes!]
+    price: BigDecimal!
+}
+
+type TokenPrice6h @entity {
+    id: ID!
+    date: Int!
+    token: Token!
+    price: BigDecimal!
+}
+
+type TokenPriceHour @entity {
+    id: ID!
+    date: Int!
+    token: Token!
+    price: BigDecimal!
+}
+
+type TokenPrice5m @entity {
+    id: ID!
+    date: Int!
+    token: Token!
+    price: BigDecimal!
 }

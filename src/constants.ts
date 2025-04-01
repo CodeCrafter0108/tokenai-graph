@@ -1,4 +1,4 @@
-import { Address, BigInt } from "@graphprotocol/graph-ts";
+import { Address, BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 
 export const ZERO = Address.fromString("0x0000000000000000000000000000000000000000")
 
@@ -18,8 +18,14 @@ export const UNDERLYING_STABLE_TOKEN_UNISWAP_V3_PAIR_TAX_RATE = i32(3000)
 
 export const E_18 = BigInt.fromI32(10).pow(18).toBigDecimal()
 
-export const N_18 = BigInt.fromI32(18).toBigDecimal()
-
 export const SONIC_ADDRESS = Address.fromString("0x0000000000000000000000000000000000000000");
 
 export const USDC_ADDRESS = Address.fromString("0x29219dd400f2Bf60E5a23d13Be72B486D4038894");
+
+export const SECONDS_PER_DAY = 86400;
+export const SECONDS_PER_6HOUR = 21600;
+export const SECONDS_PER_HOUR = 3600;
+export const SECONDS_PER_5MIN = 300;
+export let ZERO_BI = BigInt.fromI32(0);
+export let ONE_BI = BigInt.fromI32(1);
+export let ZERO_BD = BigDecimal.fromString('0');

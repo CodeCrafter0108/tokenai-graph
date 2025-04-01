@@ -1,15 +1,18 @@
 import { log } from "@graphprotocol/graph-ts";
 import { Listing } from "../../generated/Launchpad/Launchpad";
 import { LiquidityPairListener } from "../../generated/templates";
-import { LiquidityPair, Token, TokenCounter } from "../../generated/schema";
+import { LiquidityPair, Token } from "../../generated/schema";
 
 import {
+  CalculateLiquidityPool,
   GetAITokenMarketCapitalization,
+  GetAITokenPriceInNative,
   GetAITokenPriceInUSD,
   GetTotalSupply,
   GetUnderlyingStableToken,
   GetUniswapV2Pair,
 } from "../utils";
+import { ZERO_BD, ZERO_BI } from "../constants";
 
 export function handleListing(event: Listing): void {
   log.info("Handle new token listing: " + event.params.token.toHexString(), []);
@@ -38,28 +41,34 @@ export function handleListing(event: Listing): void {
   token.blockTimestamp = event.block.timestamp;
   token.transactionHash = event.transaction.hash;
 
-  liquidityPair.token0 = pair.token0();
-  liquidityPair.token1 = pair.token1();
+  const token0 = pair.token0();
+  const token1 = pair.token1();
   const reserves = pair.getReserves();
-  liquidityPair.reserve0 = reserves.get_reserve0();
-  liquidityPair.reserve1 = reserves.get_reserve1();
+  const reserve0 = reserves.get_reserve0();
+  const reserve1 = reserves.get_reserve1();
+
+  liquidityPair.token0 = token0;
+  liquidityPair.token1 = token1;
+  liquidityPair.reserve0 = reserve0;
+  liquidityPair.reserve1 = reserve1;
 
   const aiTokenPrice = GetAITokenPriceInUSD(event.params.token);
 
   token.pair = pair._address.toHexString();
   token.price = aiTokenPrice;
+  token.priceInNative = GetAITokenPriceInNative(aiTokenPrice);
   token.supply = GetTotalSupply(event.params.token);
   token.marketCap = GetAITokenMarketCapitalization(event.params.token);
+  token.liquidityPool = CalculateLiquidityPool(reserve0, reserve1, aiTokenPrice);
+
+  token.buys = ZERO_BI;
+  token.sells = ZERO_BI;
+  token.buyVolumeUSD = ZERO_BD;
+  token.sellVolumeUSD = ZERO_BD;
+  token.sellers = [];
+  token.buyers = [];
 
   LiquidityPairListener.create(pair._address);
-
-  let counter = TokenCounter.load("singleton");
-  if (counter == null) {
-    counter = new TokenCounter("singleton");
-    counter.totalCount = 0;
-  }
-  counter.totalCount = counter.totalCount + 1;
-  counter.save();
 
   token.save();
   liquidityPair.save();

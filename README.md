@@ -25,6 +25,11 @@ $ docker-compose down
 $ rm -rf build & rm -rf data
 ```
 
+## On logs
+```bash
+$ docker-compose logs -f
+```
+
 ## Important
 
 ### Make sure
